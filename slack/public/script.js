@@ -1,3 +1,9 @@
+// const userName = prompt("What is your username?");
+// const password = prompt("What is your password?");
+
+const userName = "nadiia";
+const password = "password";
+
 const socket = io("http://localhost:8001");
 
 socket.on("connect", () => {
@@ -5,4 +11,12 @@ socket.on("connect", () => {
   socket.emit("clientConnect");
 });
 
-socket.on("welcome", (data) => console.log(data));
+// listen namespaces
+socket.on("nsList", (data) => {
+  console.log(data);
+  const nameSapcesDiv = document.querySelector(".namespaces");
+  nameSapcesDiv.innerHTML = "";
+  data.forEach((ns) => {
+    nameSapcesDiv.innerHTML += `<div class="namespace" ns="${ns.endpoint}"><img src="${ns.image}"></div>`;
+  });
+});
