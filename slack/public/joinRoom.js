@@ -1,3 +1,4 @@
+import { buildMessageHtml } from "./buildMessageHTML.js";
 import { namespaceSockets } from "./script.js";
 
 export const joinRoom = async (roomTitle, namespaceId) => {
@@ -10,4 +11,12 @@ export const joinRoom = async (roomTitle, namespaceId) => {
     ".curr-room-num-users"
   ).innerHTML = `${ackResp.numUsers}<span class="fa-solid fa-user"></span>`;
   document.querySelector(".curr-room-text").innerHTML = roomTitle;
+
+  document.querySelector("#messages").innerHTML = "";
+  console.log(ackResp.thisRoomHistory);
+  ackResp.thisRoomHistory.forEach(
+    (message) =>
+      (document.querySelector("#messages").innerHTML =
+        buildMessageHtml(message))
+  );
 };

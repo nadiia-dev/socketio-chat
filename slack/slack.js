@@ -33,7 +33,13 @@ io.on("connection", (socket) => {
 
 namespaces.forEach((namespace) => {
   io.of(namespace.endpoint).on("connection", (socket) => {
-    socket.on("joinRoom", async (roomTitle, ackCallBack) => {
+    socket.on("joinRoom", async (roomObj, ackCallBack) => {
+      const thisNs = namespaces[roomObj.namespaceId];
+      const thisRoomObj = thisNs.rooms.find(
+        (room) => room.roomTitle === roomObj.roomTitle
+      );
+      const thisRoomHistory = thisRoomObj.history;
+
       const rooms = socket.rooms;
 
       let i = 0;
@@ -44,16 +50,17 @@ namespaces.forEach((namespace) => {
         i++;
       });
 
-      socket.join(roomTitle);
+      socket.join(roomObj.roomTitle);
 
       const sockets = await io
         .of(namespace.endpoint)
-        .in(roomTitle)
+        .in(roomObj.roomTitle)
         .fetchSockets();
       const socketCount = sockets.length;
 
       ackCallBack({
         numUsers: socketCount,
+        thisRoomHistory,
       });
     });
 
@@ -64,6 +71,11 @@ namespaces.forEach((namespace) => {
       io.of(namespace.endpoint)
         .in(currentRoom)
         .emit("messageToRoom", messageObj);
+      const thisNs = namespaces[messageObj.selectedNsId];
+      const thisRoom = thisNs.rooms.find(
+        (room) => room.roomTitle === currentRoom
+      );
+      thisRoom.addMessage(messageObj);
     });
   });
 });

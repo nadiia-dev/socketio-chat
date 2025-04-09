@@ -1,6 +1,7 @@
 // const userName = prompt("What is your username?");
 // const password = prompt("What is your password?");
 
+import { buildMessageHtml } from "./buildMessageHTML.js";
 import { joinNs } from "./joinNs.js";
 
 const userName = "nadiia";
@@ -39,7 +40,8 @@ const addListeners = (nsId) => {
   }
   if (!listeners.messageToRoom[nsId]) {
     namespaceSockets[nsId].on("messageToRoom", (messageObj) => {
-      console.log(messageObj);
+      document.querySelector("#messages").innerHTML +=
+        buildMessageHtml(messageObj);
     });
     listeners.messageToRoom[nsId] = true;
   }
