@@ -1,3 +1,5 @@
+import { joinNs } from "./joinNs.js";
+
 // const userName = prompt("What is your username?");
 // const password = prompt("What is your password?");
 
@@ -11,12 +13,26 @@ socket.on("connect", () => {
   socket.emit("clientConnect");
 });
 
-// listen namespaces
+// listen to nsList of namespaces
 socket.on("nsList", (data) => {
-  console.log(data);
+  const lastNs = localStorage.getItem("lastNs");
   const nameSapcesDiv = document.querySelector(".namespaces");
   nameSapcesDiv.innerHTML = "";
   data.forEach((ns) => {
     nameSapcesDiv.innerHTML += `<div class="namespace" ns="${ns.endpoint}"><img src="${ns.image}"></div>`;
   });
+
+  Array.from(document.getElementsByClassName("namespace")).forEach(
+    (element) => {
+      element.addEventListener("click", (e) => {
+        joinNs(element, data);
+      });
+    }
+  );
+  const allNamespaces = document.getElementsByClassName("namespace");
+  const target = Array.from(allNamespaces).find(
+    (el) => el.getAttribute("ns") === lastNs
+  );
+
+  joinNs(target, data);
 });
