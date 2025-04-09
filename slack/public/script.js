@@ -6,6 +6,21 @@ import { joinNs } from "./joinNs.js";
 const userName = "nadiia";
 const password = "password";
 
+const nameSpaceSockets = [];
+const listeners = {
+  nsChange: [],
+};
+
+const addListeners = (nsId) => {
+  if (!listeners.nsChange[nsId]) {
+    nameSpaceSockets[nsId].on("nsChange", (data) => {
+      console.log("Namespace Changed!");
+      console.log(data);
+    });
+    listeners.nsChange[nsId] = true;
+  }
+};
+
 const socket = io("http://localhost:8001");
 
 socket.on("connect", () => {
@@ -20,7 +35,13 @@ socket.on("nsList", (data) => {
   nameSapcesDiv.innerHTML = "";
   data.forEach((ns) => {
     nameSapcesDiv.innerHTML += `<div class="namespace" ns="${ns.endpoint}"><img src="${ns.image}"></div>`;
-    io(`http://localhost:8001${ns.endpoint}`);
+
+    let thisNs = nameSpaceSockets[ns.id];
+    if (!nameSpaceSockets[ns.id]) {
+      nameSpaceSockets[ns.id] = io(`http://localhost:8001${ns.endpoint}`);
+    }
+
+    addListeners(ns.id);
   });
 
   Array.from(document.getElementsByClassName("namespace")).forEach(
