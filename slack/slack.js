@@ -56,5 +56,14 @@ namespaces.forEach((namespace) => {
         numUsers: socketCount,
       });
     });
+
+    socket.on("newMessageToRoom", (messageObj) => {
+      const rooms = socket.rooms;
+      const currentRoom = [...rooms][1];
+
+      io.of(namespace.endpoint)
+        .in(currentRoom)
+        .emit("messageToRoom", messageObj);
+    });
   });
 });

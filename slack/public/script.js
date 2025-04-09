@@ -9,7 +9,25 @@ const password = "password";
 export const namespaceSockets = [];
 const listeners = {
   nsChange: [],
+  messageToRoom: [],
 };
+
+window.selectedNsId = 0;
+
+document.querySelector("#message-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const newMessage = document.querySelector("#user-message").value;
+  console.log(newMessage, selectedNsId);
+  namespaceSockets[selectedNsId].emit("newMessageToRoom", {
+    newMessage,
+    date: Date.now(),
+    avatar: "https://via.placeholder.com/30",
+    userName,
+    selectedNsId,
+  });
+  document.querySelector("#user-message").value = "";
+});
 
 const addListeners = (nsId) => {
   if (!listeners.nsChange[nsId]) {
@@ -18,6 +36,12 @@ const addListeners = (nsId) => {
       console.log(data);
     });
     listeners.nsChange[nsId] = true;
+  }
+  if (!listeners.messageToRoom[nsId]) {
+    namespaceSockets[nsId].on("messageToRoom", (messageObj) => {
+      console.log(messageObj);
+    });
+    listeners.messageToRoom[nsId] = true;
   }
 };
 
