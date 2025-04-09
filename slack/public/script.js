@@ -7,6 +7,17 @@ import { joinNs } from "./joinNs.js";
 const userName = "nadiia";
 const password = "password";
 
+const clientOptions = {
+  query: {
+    userName,
+    password,
+  },
+  auth: {
+    userName,
+    password,
+  },
+};
+
 export const namespaceSockets = [];
 const listeners = {
   nsChange: [],
