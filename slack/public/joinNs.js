@@ -9,13 +9,20 @@ export function joinNs(element, nsData) {
   let roomList = document.querySelector(".room-list");
   roomList.innerHTML = "";
 
+  let firstRoom;
+
   rooms.forEach((room, i) => {
+    if (i === 0) {
+      firstRoom = room.roomTitle;
+    }
     roomList.innerHTML += `<li class="room" namespaceId=${room.namespaceId}>
             <span class="fa-solid fa-${
               room.privateRoom ? "lock" : "globe"
             }"></span>${room.roomTitle}
         </li>`;
   });
+
+  joinRoom(firstRoom, clickedNs.id);
 
   const roomNodes = document.querySelectorAll(".room");
   Array.from(roomNodes).forEach((elem) =>
