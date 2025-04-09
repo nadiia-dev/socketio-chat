@@ -33,6 +33,8 @@ io.on("connection", (socket) => {
 
 namespaces.forEach((namespace) => {
   io.of(namespace.endpoint).on("connection", (socket) => {
-    console.log(`${socket.id} has connected to ${namespace.endpoint}`);
+    socket.on("joinRoom", (roomTitle) => {
+      socket.join(roomTitle);
+    });
   });
 });

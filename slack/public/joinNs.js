@@ -1,3 +1,5 @@
+import { joinRoom } from "./joinRoom.js";
+
 export function joinNs(element, nsData) {
   const nsEndpoint = element.getAttribute("ns");
 
@@ -14,6 +16,14 @@ export function joinNs(element, nsData) {
             }"></span>${room.roomTitle}
         </li>`;
   });
+
+  const roomNodes = document.querySelectorAll(".room");
+  Array.from(roomNodes).forEach((elem) =>
+    elem.addEventListener("click", (e) => {
+      const namespaceId = elem.getAttribute("namespaceId");
+      joinRoom(e.target.innerText, namespaceId);
+    })
+  );
 
   localStorage.setItem("lastNs", nsEndpoint);
 }

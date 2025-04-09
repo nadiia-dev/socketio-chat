@@ -1,19 +1,19 @@
-import { joinNs } from "./joinNs.js";
-
 // const userName = prompt("What is your username?");
 // const password = prompt("What is your password?");
+
+import { joinNs } from "./joinNs.js";
 
 const userName = "nadiia";
 const password = "password";
 
-const nameSpaceSockets = [];
+export const namespaceSockets = [];
 const listeners = {
   nsChange: [],
 };
 
 const addListeners = (nsId) => {
   if (!listeners.nsChange[nsId]) {
-    nameSpaceSockets[nsId].on("nsChange", (data) => {
+    namespaceSockets[nsId].on("nsChange", (data) => {
       console.log("Namespace Changed!");
       console.log(data);
     });
@@ -36,9 +36,9 @@ socket.on("nsList", (data) => {
   data.forEach((ns) => {
     nameSapcesDiv.innerHTML += `<div class="namespace" ns="${ns.endpoint}"><img src="${ns.image}"></div>`;
 
-    let thisNs = nameSpaceSockets[ns.id];
-    if (!nameSpaceSockets[ns.id]) {
-      nameSpaceSockets[ns.id] = io(`http://localhost:8001${ns.endpoint}`);
+    let thisNs = namespaceSockets[ns.id];
+    if (!namespaceSockets[ns.id]) {
+      namespaceSockets[ns.id] = io(`http://localhost:8001${ns.endpoint}`);
     }
 
     addListeners(ns.id);
