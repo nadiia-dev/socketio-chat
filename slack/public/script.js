@@ -1,11 +1,8 @@
-// const userName = prompt("What is your username?");
-// const password = prompt("What is your password?");
+const userName = prompt("What is your username?");
+const password = prompt("What is your password?");
 
 import { buildMessageHtml } from "./buildMessageHTML.js";
 import { joinNs } from "./joinNs.js";
-
-const userName = "nadiia";
-const password = "password";
 
 const clientOptions = {
   query: {
@@ -17,6 +14,8 @@ const clientOptions = {
     password,
   },
 };
+
+const socket = io("http://localhost:8001", clientOptions);
 
 export const namespaceSockets = [];
 const listeners = {
@@ -34,7 +33,7 @@ document.querySelector("#message-form").addEventListener("submit", (e) => {
   namespaceSockets[selectedNsId].emit("newMessageToRoom", {
     newMessage,
     date: Date.now(),
-    avatar: "https://via.placeholder.com/30",
+    avatar: "./images/placeholder.png",
     userName,
     selectedNsId,
   });
@@ -57,8 +56,6 @@ const addListeners = (nsId) => {
     listeners.messageToRoom[nsId] = true;
   }
 };
-
-const socket = io("http://localhost:8001");
 
 socket.on("connect", () => {
   console.log("connected");
