@@ -15,7 +15,7 @@ const clientOptions = {
   },
 };
 
-const socket = io("http://localhost:8001", clientOptions);
+const socket = io("https://socketio-chat-my7k.onrender.com", clientOptions);
 
 export const namespaceSockets = [];
 const listeners = {
@@ -72,7 +72,9 @@ socket.on("nsList", (data) => {
 
     let thisNs = namespaceSockets[ns.id];
     if (!namespaceSockets[ns.id]) {
-      namespaceSockets[ns.id] = io(`http://localhost:8001${ns.endpoint}`);
+      namespaceSockets[ns.id] = io(
+        `https://socketio-chat-my7k.onrender.com${ns.endpoint}`
+      );
     }
 
     addListeners(ns.id);
