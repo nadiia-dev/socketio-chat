@@ -13,7 +13,6 @@ export const joinRoom = async (roomTitle, namespaceId) => {
   document.querySelector(".curr-room-text").innerHTML = roomTitle;
 
   document.querySelector("#messages").innerHTML = "";
-  console.log(ackResp.thisRoomHistory);
   ackResp.thisRoomHistory.forEach(
     (message) =>
       (document.querySelector("#messages").innerHTML =
